@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "synapse"
+version = "0.1.0"
+description = ""
+authors = ["ChiragAgg5k <110609663+ChiragAgg5k@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+mindsdb-sdk = "^2.4.3"
+customtkinter = "^5.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
