@@ -7,13 +7,8 @@ server = mindsdb_sdk.connect()
 project = server.get_project("mindsdb")
 model = server.get_model("openai_model")
 
-# Set the appearance mode and color theme
-customtkinter.set_appearance_mode(
-    "System"
-)  # Modes: "System" (default), "Light", "Dark"
-customtkinter.set_default_color_theme(
-    "blue"
-)  # Themes: "blue" (default), "dark-blue", "green"
+customtkinter.set_appearance_mode("System")
+customtkinter.set_default_color_theme("blue")
 
 
 def list_models():
@@ -24,28 +19,29 @@ def list_models():
 
 
 class ChatApp(customtkinter.CTk):
-    def __init__(self):
+    """Main application class"""
+
+    def __init__(self) -> None:
+        """Initialize the application"""
+
         super().__init__()
 
         self.title("Synapse - General Room")
-        self.geometry("805x300")  # Adjusted width to accommodate chatrooms column
+        self.geometry("805x300")
         self.center_window(805, 300)
 
         self.current_model = "openai_model"
         self.current_chatroom = "General"
         self.chat_history = {"General": []}
 
-        # Create chatroom selection area
         self.chatroom_frame = customtkinter.CTkFrame(self, width=100, height=280)
         self.chatroom_frame.grid(row=0, column=0, padx=(10, 5), pady=10, sticky="nsew")
 
-        # Add label for chatroom selection
         self.chatroom_label = customtkinter.CTkLabel(
             self.chatroom_frame, text="Chatrooms"
         )
         self.chatroom_label.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="ew")
 
-        # Add chatroom buttons
         self.chatroom_buttons = []
         button = customtkinter.CTkButton(
             self.chatroom_frame,
@@ -55,10 +51,9 @@ class ChatApp(customtkinter.CTk):
         button.grid(row=1, column=0, padx=10, pady=(5, 5), sticky="ew")
         self.chatroom_buttons.append(button)
 
-        # Add Create button
         self.create_button = customtkinter.CTkButton(
             self.chatroom_frame,
-            text="Create",
+            text="Create New Chat",
             command=self.create_chatroom,
             fg_color=("black"),
         )
@@ -70,31 +65,27 @@ class ChatApp(customtkinter.CTk):
             sticky="ew",
         )
 
-        # Create chat display area
         self.chat_display = customtkinter.CTkTextbox(self, width=400, height=280)
         self.chat_display.grid(row=0, column=1, padx=(10, 5), pady=10)
 
-        # Create input field and send button frame
         self.input_frame = customtkinter.CTkFrame(self, width=200, height=280)
         self.input_frame.grid(row=0, column=2, padx=(5, 10), pady=10, sticky="nsew")
 
-        # Add input field to the frame
-        self.input_field = customtkinter.CTkEntry(self.input_frame, width=180)
+        self.input_field = customtkinter.CTkEntry(
+            self.input_frame, width=180, placeholder_text="Ask Synapse"
+        )
         self.input_field.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="ew")
 
-        # Add send button to the frame
         self.send_button = customtkinter.CTkButton(
             self.input_frame, text="Send", command=self.send_message
         )
         self.send_button.grid(row=1, column=0, padx=10, pady=(5, 10), sticky="ew")
 
-        # Add label for model selection
         self.model_label = customtkinter.CTkLabel(
             self.input_frame, text="Select Model:"
         )
         self.model_label.grid(row=2, column=0, padx=10, pady=(10, 5), sticky="ew")
 
-        # Add a toggle button to switch between different models
         self.model_button = customtkinter.CTkOptionMenu(
             self.input_frame,
             values=list_models(),
@@ -104,13 +95,13 @@ class ChatApp(customtkinter.CTk):
 
         self.bind("<Return>", self.send_message)  # Bind Enter key to send message
 
-    def switch_chatroom(self, chatroom):
-        # Save current chat history
+    def switch_chatroom(self, chatroom) -> None:
+        """Switch to a different chatroom"""
+
         self.chat_history[self.current_chatroom] = self.chat_display.get(
             "1.0", customtkinter.END
         )
 
-        # Switch to new chatroom
         self.current_chatroom = chatroom
         self.title(f"Synapse - {chatroom} Room")
         self.chat_display.delete("1.0", customtkinter.END)
@@ -118,13 +109,21 @@ class ChatApp(customtkinter.CTk):
             customtkinter.END, self.chat_history[self.current_chatroom]
         )
 
-    def switch_model(self, choice):
+    def switch_model(self, choice) -> None:
+        """Switch to a different model
+
+        Args:
+            choice (str): The name of the model to switch to
+        """
+
         self.current_model = choice
         global model
         model = server.get_model(choice)
         self.chat_display.insert(customtkinter.END, f"Switched to model: {choice}\n")
 
-    def create_chatroom(self):
+    def create_chatroom(self) -> None:
+        """Create a new chatroom"""
+
         input_dialog = customtkinter.CTkInputDialog(
             text="Enter the name of the new chatroom:", title="Create Chatroom"
         )
@@ -146,21 +145,38 @@ class ChatApp(customtkinter.CTk):
                 )
                 self.chatroom_buttons.append(button)
 
-    def center_window(self, width, height):
+    def center_window(self, width, height) -> None:
+        """Center the window on the screen
+
+        Args:
+            width (int): The width of the window
+            height (int): The height of the window
+        """
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         x = (screen_width // 2) - (width // 2)
         y = (screen_height // 2) - (height // 2)
         self.geometry(f"{width}x{height}+{x}+{y}")
 
-    def send_message(self, event=None):
+    def send_message(self, event=None) -> None:
+        """Send a message to the chatbot
+
+        Args:
+            event (event, optional): The event that triggered the function. Defaults to None.
+        """
+
         message = self.input_field.get()
         if message.strip() != "":
             self.chat_display.insert(customtkinter.END, f"You: {message}\n")
             self.input_field.delete(0, customtkinter.END)
             self.reply_message(message)
 
-    def reply_message(self, message):
+    def reply_message(self, message) -> None:
+        """Reply to a message with the chatbot's response
+
+        Args:
+            message (str): The message to reply to
+        """
         prediction_df = pd.DataFrame(
             model.predict(
                 {
