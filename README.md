@@ -1,5 +1,3 @@
-# Synapse
-
 <a id="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
@@ -15,7 +13,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/ChiragAgg5k/synapse">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/1.png" alt="Logo" width="600" height="250">
   </a>
 
   <h3 align="center">Synapse</h3>
