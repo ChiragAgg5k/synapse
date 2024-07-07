@@ -58,6 +58,13 @@
   </ol>
 </details>
 
+## Video demo
+
+https://github.com/ChiragAgg5k/synapse/assets/110609663/99808ebc-3a6f-40ad-9cf3-3e84eaebb10a
+
+Or you can check the video on youtube - [here](https://youtu.be/MH31glwO6oE)
+
+
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
