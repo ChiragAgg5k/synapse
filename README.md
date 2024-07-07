@@ -62,8 +62,6 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 Synapse is a versatile playground for exploring and interacting with various AI-powered chatbots. This project allows users to experiment with different chatbot models, providing a unified interface for interaction and analysis.
 
 ### Built With
